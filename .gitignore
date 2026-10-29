@@ -1,0 +1,30 @@
+# Secrets & Environment Variables — NEVER COMMIT
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*service-account*.json
+
+# Python Bytecode & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Local Test Media
+*.mp4
+*.mov
+*.webm
+*.m4v
+*.gif
+*.png
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

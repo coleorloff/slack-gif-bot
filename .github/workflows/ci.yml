@@ -1,0 +1,31 @@
+name: Security & Syntax Check
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Scan for accidental secrets or live service URLs
+        run: |
+          if grep -RInE "xox[baprs]-[0-9]{10,}|BEGIN (RSA|OPENSSH|PRIVATE) KEY|[a-z0-9-]+-[0-9]{10,}\.[a-z0-9-]+\.run\.app" --exclude-dir=.git .; then
+            echo "❌ ERROR: Potential secret or live Cloud Run URL detected!"
+            exit 1
+          fi
+          echo "✅ Zero secrets or live URLs found."
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies & verify Python syntax
+        run: |
+          pip install -r requirements.txt
+          python -m py_compile main.py
